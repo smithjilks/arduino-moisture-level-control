@@ -1,12 +1,15 @@
 //pins
 int sensor_pin = A0;
-int currentSoilMoistureLevel;
+int pump = 13;
 
+
+int currentSoilMoistureLevel;
 
 void setup() {
   // put your setup code here, to run once:
+  pinMode(pump, OUTPUT);
   Serial.begin(9600);
-  Serial.println("Values....");
+  Serial.println("Running....");
   delay(2000);
 
 }
@@ -17,21 +20,21 @@ void loop() {
   Serial.println("Moisture: ");
   Serial.println(currentSoilMoistureLevel);
 
-  if (currentSoilMoistureLevel > 900){
-    Serial.println("on");
+  if (currentSoilMoistureLevel > 570){
+    digitalWrite(pump,HIGH);
     
-  } else if(currentSoilMoistureLevel < 270){
-    Serial.println("off");  
+  } else if(currentSoilMoistureLevel < 220){
+    digitalWrite(pump,LOW);  
     
-  } else if((currentSoilMoistureLevel >= 270) || (currentSoilMoistureLevel <= 900)){
-      float currentSoilMoistureLevelPercentage = (900 - currentSoilMoistureLevel);
-      currentSoilMoistureLevelPercentage = currentSoilMoistureLevelPercentage * 100 / 630;
+  } else if((currentSoilMoistureLevel >= 220) || (currentSoilMoistureLevel <= 570)){
+      float currentSoilMoistureLevelPercentage = (570 - currentSoilMoistureLevel);
+      currentSoilMoistureLevelPercentage = currentSoilMoistureLevelPercentage * 100 / 350;
       Serial.println(currentSoilMoistureLevelPercentage);
 
-      if(currentSoilMoistureLevelPercentage >= 50.0){
-        Serial.println("off");
+      if(currentSoilMoistureLevelPercentage >= 50.0){ // If moisture level of 50% is required
+        digitalWrite(pump,LOW);
       }else {
-        Serial.println("on");
+        digitalWrite(pump,HIGH);
       }
   
   }
